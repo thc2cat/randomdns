@@ -17,12 +17,15 @@ import (
 func main() {
 
 	rand.Seed(time.Now().UTC().UnixNano())
+
 	for {
-		a := strconv.Itoa(rand.Intn(255))
-		b := strconv.Itoa(rand.Intn(255))
-		c := strconv.Itoa(rand.Intn(255))
-		d := strconv.Itoa(rand.Intn(255))
-		ipstring := a + "." + b + "." + c + "." + d
+		ipstring := ""
+		for i := 1; i < 4; i++ {
+			ipstring += strconv.Itoa(rand.Intn(255))
+			ipstring += "."
+		}
+		ipstring += strconv.Itoa(rand.Intn(255))
+
 		fmt.Print(ipstring, " : ")
 		hostname, _ := net.LookupAddr(ipstring)
 		fmt.Print(hostname, "\n")
