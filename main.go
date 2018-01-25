@@ -2,7 +2,8 @@
 //
 // generate random dns queries
 // usefull when you want to test your DNS queries
-// (unbound as transparent DNS resolver)
+// (unbound as transparent DNS resolver in a FreeBSD NAT gateway)
+//
 
 package main
 
@@ -10,12 +11,23 @@ import (
 	"fmt"
 	"math/rand"
 	"net"
+	"os"
+	"os/signal"
 	"strconv"
 	"time"
 )
 
 func main() {
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for range c {
+			// sig is a ^C, handle it
+			fmt.Println("\nBye")
+			os.Exit(0)
+		}
+	}()
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	for {
